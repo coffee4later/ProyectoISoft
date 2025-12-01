@@ -6,7 +6,12 @@
         "strict": false,
         "sourceMap": true,
         "esModuleInterop": true,
-        "declaration": true
+        "declaration": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "target":"esnext",
+        "moduleResolution": "nodenext",
+        "module": "nodenext"
     },
     "include": ["src/**/*.ts"],
 }
