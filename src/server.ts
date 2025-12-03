@@ -2,13 +2,15 @@ import express from 'express';
 import router from './router';
 import db from './config/db';
 import colors from 'colors';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger';
 
 // COnectar db
 async function conectarDB() {
     try {
         await db.authenticate();
         db.sync();
-        console.log(colors.bgGreen.white('Base de datos conectada'));
+        // console.log(colors.bgGreen.white('Base de datos conectada'));
     } catch (error) {
         console.log(error);
 
@@ -23,5 +25,5 @@ const server = express();
 server.use(express.json());
 
 server.use('/productos', router);
-
+server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 export default server;
