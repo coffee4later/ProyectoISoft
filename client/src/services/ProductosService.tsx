@@ -11,7 +11,8 @@ export async function addProducto(data: ProductoData) {
     try {
         const result = safeParse(DraftProductoSchema, {
             name: data.name,
-            price: +data.price
+            price: +data.price,
+            availability: true
         })
         if (result.success) {
             const url =`${import.meta.env.VITE_API_URL}/productos`;
