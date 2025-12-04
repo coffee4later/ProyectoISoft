@@ -11,13 +11,15 @@ export async function addProducto(data: ProductoData) {
     try {
         const result = safeParse(DraftProductoSchema, {
             name: data.name,
-            price: +data.price
+            price: +data.price,
+            availability: data.availability === 'on' || data.availability === 'true'
         })
         if (result.success) {
             const url =`${import.meta.env.VITE_API_URL}/productos`;
             const {data} = await axios.post(url, {
                 name: result.output.name,
-                price: result.output.price
+                price: result.output.price,
+                availability: result.output.availability
             });
             console.log('Producto agregado:', data);
         }else{
@@ -62,7 +64,6 @@ export async function getProductoById(id:Product['id']) {
 export async function updateProducto(data: ProductoData, id: Product['id']) {
 
     try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const NumberSchema = pipe(unknown(), transform((v) => Number(v)), number())
 
         const result = safeParse(DraftProductoSchema, {
@@ -74,11 +75,16 @@ export async function updateProducto(data: ProductoData, id: Product['id']) {
         console.log(result);
         if (result.success) {
             const url =`${import.meta.env.VITE_API_URL}/productos/${id}`;
-            await axios.put(url, result.output);
+            const {data: response} = await axios.put(url, result.output);
+            console.log('Producto actualizado:', response);
+            return response;
+        } else {
+            throw new Error('Error de validación al actualizar producto');
         }
 
     } catch (error) {
         console.log('Error al actualizar el producto:', error);
+        throw error;
     }
 
 
@@ -99,11 +105,13 @@ export async function deleteProducto(id: Product['id']) {
 export async function updateProductAvailability(id: Product['id']) {
     try {
         const url =`${import.meta.env.VITE_API_URL}/productos/${id}`
-        const res = await axios.patch(url);
-        console.log(res);
+        const {data} = await axios.patch(url);
+        console.log('Disponibilidad actualizada:', data);
+        return data.data;
 
     } catch (error) {
         console.log('Error al actualizar la disponibilidad del producto:', error);
+        throw error;
     }
 
 }

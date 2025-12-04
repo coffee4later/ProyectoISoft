@@ -33,9 +33,13 @@ export async function action({request, params}: ActionFunctionArgs){
         return error
     }
     if(params.id!==undefined){
-      await updateProducto(data, params.id);
-      return redirect('/');
-
+      try {
+        await updateProducto(data, +params.id);
+        return redirect('/');
+      } catch (err) {
+        console.error('Error en acción de actualizar:', err);
+        return 'Error al actualizar el producto';
+      }
     }
 }
 

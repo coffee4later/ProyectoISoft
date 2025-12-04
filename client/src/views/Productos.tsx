@@ -1,9 +1,18 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useFetcher } from "react-router-dom";
+import { useEffect } from "react";
 import ProductoDetails from "../components/ProductoDetails";
 import type { Product } from "../types";
 
 export default function Productos() {
   const productos = useLoaderData() as Product[];
+  const fetcher = useFetcher();
+
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data) {
+      // La acción se completó, los datos se han recargado automáticamente
+      console.log('Acción completada, datos recargados');
+    }
+  }, [fetcher.state, fetcher.data]);
 
   return (
     <>

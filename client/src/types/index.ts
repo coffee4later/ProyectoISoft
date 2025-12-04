@@ -1,4 +1,4 @@
-import { array, boolean, number, object, string} from 'valibot';
+import { array, boolean, number, object, string, Output} from 'valibot';
 
 
 export const DraftProductoSchema = object({

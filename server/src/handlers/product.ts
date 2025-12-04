@@ -16,7 +16,11 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
-        const products = await Product.findAll();
+        const products = await Product.findAll(
+            {
+                order: [['id', 'ASC']]
+            }
+        );
         res.status(200).json({ data: products });
     } catch (error) {
         console.error(error);
@@ -70,9 +74,10 @@ export const updateAvailability = async (req: Request, res: Response) => {
         }
 
         //Actualizar producto
-        // console.log("Actual", product.getDataValue('availability'));
+        console.log("Actual", product.getDataValue('availability'));
+        //product.availability = !product.dataValues.availability;
         product.setDataValue('availability', !product.getDataValue('availability'));
-        // console.log("Actualizado", product.availability);
+        console.log("Actualizado", product.availability);
         await product.save();
 
         res.status(200).json({ data: product });

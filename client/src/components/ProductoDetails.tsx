@@ -12,7 +12,11 @@ export default function ProductoDetails({product}: ProductoDetailsProps) {
 
     const fetcher = useFetcher();
     const navigate = useNavigate();
-    const isAvailable = product.availability;
+
+    // Mostrar disponibilidad optimista: si hay data pendiente, mostrar el estado toggleado
+    const isAvailable = fetcher.formData
+        ? !(product.availability)
+        : product.availability;
 
     return (
         <tr className="border-b ">
@@ -30,9 +34,10 @@ export default function ProductoDetails({product}: ProductoDetailsProps) {
                 type='submit'
                 name='id'
                 value={product.id}
-                className={`${isAvailable ? 'text-black' : 'text-red-600'} rounded-lg w-full p-2 uppercase font-bold text-xs text-center border border-black-100 hover:cursor-pointer` }
+                disabled={fetcher.state === 'submitting'}
+                className={`${isAvailable ? 'text-black' : 'text-red-600'} rounded-lg w-full p-2 uppercase font-bold text-xs text-center border border-black-100 hover:cursor-pointer disabled:opacity-50` }
                 >
-                    {isAvailable ? 'Disponible' : 'No Disponible'}
+                    {fetcher.state === 'submitting' ? 'Actualizando...' : (isAvailable ? 'Disponible' : 'No Disponible')}
                 </button>
             </fetcher.Form>
 
